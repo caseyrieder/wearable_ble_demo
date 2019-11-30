@@ -1,0 +1,115 @@
+const one = {
+  advertising: {
+    isConnectable: true,
+    localName: 'Adafruit Bluefruit LE 29C7',
+    manufacturerData: {
+      CDVType: 'ArrayBuffer',
+      bytes: [Array],
+      data:
+        'AgEGAgoAEQaeytwkDuWp4JPzo7UBAEBuGwlBZGFmcnVpdCBCbHVlZnJ1aXQgTEUgMjlDNwAAAAAAAAAAAAA=',
+    },
+    serviceData: {},
+    serviceUUIDs: ['6e400001-b5a3-f393-e0a9-e50e24dcca9e'],
+    txPowerLevel: 0,
+  },
+  characteristics: [
+    {characteristic: '2a00', properties: [Object], service: '1800'},
+    {characteristic: '2a01', properties: [Object], service: '1800'},
+    {characteristic: '2a04', properties: [Object], service: '1800'},
+    {
+      characteristic: '2a05',
+      descriptors: [Array],
+      properties: [Object],
+      service: '1801',
+    },
+    {
+      characteristic: '00001532-1212-efde-1523-785feabcd123',
+      properties: [Object],
+      service: '00001530-1212-efde-1523-785feabcd123',
+    },
+    {
+      characteristic: '00001531-1212-efde-1523-785feabcd123',
+      descriptors: [Array],
+      properties: [Object],
+      service: '00001530-1212-efde-1523-785feabcd123',
+    },
+    {
+      characteristic: '00001534-1212-efde-1523-785feabcd123',
+      properties: [Object],
+      service: '00001530-1212-efde-1523-785feabcd123',
+    },
+    {characteristic: '2a29', properties: [Object], service: '180a'},
+    {characteristic: '2a24', properties: [Object], service: '180a'},
+    {characteristic: '2a28', properties: [Object], service: '180a'},
+    {characteristic: '2a26', properties: [Object], service: '180a'},
+    {characteristic: '2a27', properties: [Object], service: '180a'},
+    {
+      characteristic: '6e400003-b5a3-f393-e0a9-e50e24dcca9e',
+      descriptors: [Array],
+      properties: [Object],
+      service: '6e400001-b5a3-f393-e0a9-e50e24dcca9e',
+    },
+    {
+      characteristic: '6e400002-b5a3-f393-e0a9-e50e24dcca9e',
+      descriptors: [Array],
+      properties: [Object],
+      service: '6e400001-b5a3-f393-e0a9-e50e24dcca9e',
+    },
+    {
+      characteristic: 'ee0c2081-8786-40ba-ab96-99b91ac981d8',
+      properties: [Object],
+      service: 'ee0c2080-8786-40ba-ab96-99b91ac981d8',
+    },
+    {
+      characteristic: 'ee0c2082-8786-40ba-ab96-99b91ac981d8',
+      properties: [Object],
+      service: 'ee0c2080-8786-40ba-ab96-99b91ac981d8',
+    },
+    {
+      characteristic: 'ee0c2083-8786-40ba-ab96-99b91ac981d8',
+      properties: [Object],
+      service: 'ee0c2080-8786-40ba-ab96-99b91ac981d8',
+    },
+    {
+      characteristic: 'ee0c2084-8786-40ba-ab96-99b91ac981d8',
+      properties: [Object],
+      service: 'ee0c2080-8786-40ba-ab96-99b91ac981d8',
+    },
+    {
+      characteristic: 'ee0c2085-8786-40ba-ab96-99b91ac981d8',
+      properties: [Object],
+      service: 'ee0c2080-8786-40ba-ab96-99b91ac981d8',
+    },
+    {
+      characteristic: 'ee0c2086-8786-40ba-ab96-99b91ac981d8',
+      properties: [Object],
+      service: 'ee0c2080-8786-40ba-ab96-99b91ac981d8',
+    },
+    {
+      characteristic: 'ee0c2087-8786-40ba-ab96-99b91ac981d8',
+      properties: [Object],
+      service: 'ee0c2080-8786-40ba-ab96-99b91ac981d8',
+    },
+    {
+      characteristic: 'ee0c2088-8786-40ba-ab96-99b91ac981d8',
+      properties: [Object],
+      service: 'ee0c2080-8786-40ba-ab96-99b91ac981d8',
+    },
+    {
+      characteristic: 'ee0c2089-8786-40ba-ab96-99b91ac981d8',
+      properties: [Object],
+      service: 'ee0c2080-8786-40ba-ab96-99b91ac981d8',
+    },
+  ],
+  id: 'C5:E9:9D:E9:29:C7',
+  name: 'Adafruit Bluefruit LE 29C7',
+  rssi: -42,
+  services: [
+    {uuid: '1800'},
+    {uuid: '1801'},
+    {uuid: '00001530-1212-efde-1523-785feabcd123'},
+    {uuid: '180a'},
+    {uuid: '6e400001-b5a3-f393-e0a9-e50e24dcca9e'},
+    {uuid: 'ee0c2080-8786-40ba-ab96-99b91ac981d8'},
+  ],
+};

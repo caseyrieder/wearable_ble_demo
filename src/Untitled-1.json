@@ -1,0 +1,53 @@
+{
+  "advertising": {
+    "isConnectable": true,
+    "localName": "Wearable Media Smart Bag",
+    "manufacturerData": {
+      "CDVType": "ArrayBuffer",
+      "bytes": [Array],
+      "data": "CQlUS0JhZyAzNA4JVEJhZyAzNCBTaG9ydAIBBhkJV2VhcmFibGUgTWVkaWEgU21hcnQgQmFnAAAAAAAAAAA="
+    },
+    "serviceData": {},
+    "serviceUUIDs": [],
+    "txPowerLevel": -2147483648
+  },
+  "characteristics": [
+    {
+      "characteristic": "2a05",
+      "descriptors": [Array],
+      "properties": [Object],
+      "service": "1801"
+    },
+    {"characteristic": "2a00", "properties": [Object], "service": "1800"},
+    {"characteristic": "2a01", "properties": [Object], "service": "1800"},
+    {"characteristic": "2aa6", "properties": [Object], "service": "1800"},
+    {
+      "characteristic": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+      "properties": [Object],
+      "service": "11111111-1111-1111-1111-111111111111"
+    },
+    {
+      "characteristic": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+      "properties": [Object],
+      "service": "11111111-1111-1111-1111-111111111111"
+    },
+    {
+      "characteristic": "22222222-2222-2222-2222-222222222222",
+      "properties": [Object],
+      "service": "11111111-1111-1111-1111-111111111111"
+    },
+    {
+      "characteristic": "dddddddd-dddd-dddd-dddd-dddddddddddd",
+      "properties": [Object],
+      "service": "11111111-1111-1111-1111-111111111111"
+    }
+  ],
+  "id": "3C:71:BF:6F:32:52",
+  "name": "TKBag 34",
+  "rssi": -50,
+  "services": [
+    {"uuid": "1801"},
+    {"uuid": "1800"},
+    {"uuid": "11111111-1111-1111-1111-111111111111"}
+  ]
+}
