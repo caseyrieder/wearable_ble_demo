@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   AppRegistry,
   StyleSheet,
@@ -16,13 +18,9 @@ import {
   Dimensions,
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
-import {stringToBytes} from 'convert-string';
 import {
-  intToHex,
-  fullRGBConvert,
-  hexToBytes,
-  intToBytes,
-} from './dataConversion';
+  stringToBytes
+} from 'convert-string';
 
 const window = Dimensions.get('window');
 
@@ -31,26 +29,11 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const UUIDPrefix = '23511812-719';
 const UUIDSuffix = '-ba07-abc4-b20a119cd05b';
-const serviceUUID = '23511812-7192-ba07-abc4-b20a119cd05b';
-const messageUUID = '23511812-7195-ba07-abc4-b20a119cd05b';
-const colorUUID = '23511812-7196-ba07-abc4-b20a119cd05b';
-const speedUUID = '23511812-7197-ba07-abc4-b20a119cd05b';
-const directionUUID = '23511812-7198-ba07-abc4-b20a119cd05b';
-
-const newMsg = 'This should be the new message that the Arduino displays';
-const newColor = 'A12E64';
-const newSpeed = 18;
-const newDirection = 1;
-
-const byteMsg = stringToBytes(newMsg);
-
-const midColor = "0x"+newColor;
-const midSpeed = "0x"+newSpeed.toString(16);
-const midDir = "0x0"+newDirection.toString(10);
-
-const colorToSend = stringToBytes(midColor);
-const speedToSend = stringToBytes(midSpeed);
-const dirToSend = stringToBytes(midDir);
+const serviceUUID = UUIDPrefix + '2' + UUIDSuffix;
+const messageUUID = UUIDPrefix + '5' + UUIDSuffix;
+const colorUUID = UUIDPrefix + '6' + UUIDSuffix;
+const speedUUID = UUIDPrefix + '7' + UUIDSuffix;
+const directionUUID = UUIDPrefix + '8' + UUIDSuffix;
 
 class BLEMang extends Component {
   constructor() {
@@ -78,7 +61,7 @@ class BLEMang extends Component {
     AppState.addEventListener('change', this.handleAppStateChange);
 
     BleManager.start({
-      showAlert: false,
+      showAlert: false
     });
 
     this.handlerDiscover = bleManagerEmitter.addListener(
@@ -117,23 +100,6 @@ class BLEMang extends Component {
         }
       });
     }
-    console.log('new msg text: ', newMsg,'...', typeof newMsg);
-    console.log(' ');
-    console.log(`new color: (${newColor}`);
-    console.log(' ');
-    console.log('new speed: ', newSpeed, '...', typeof newSpeed);
-    console.log(' ');
-    console.log('new direction: ', newDirection, '...', typeof newDirection);
-
-    console.log(' ');
-    console.log('BYTESBYTESBYTESBYTESBYTES');
-    console.log(`byte msg text: ${byteMsg} ... ${typeof byteMsg}`);
-    console.log(' ');
-    console.log(`byte color: ${colorToSend}`);
-    console.log(' ');
-    console.log(`byte speed: ${speedToSend}... ${typeof speedToSend}`);
-    console.log(' ');
-    console.log(`byte direction: ${dirToSend}... ${typeof dirToSend}`);
   }
   handleAppStateChange(nextAppState) {
     if (
@@ -146,7 +112,7 @@ class BLEMang extends Component {
       });
     }
     this.setState({
-      appState: nextAppState,
+      appState: nextAppState
     });
   }
 
@@ -165,7 +131,7 @@ class BLEMang extends Component {
       peripherals.set(peripheral.id, peripheral);
       this.setState({
         peripherals,
-        paired: {},
+        paired: {}
       });
     }
     console.log('Disconnected from ' + data.peripheral);
@@ -174,9 +140,9 @@ class BLEMang extends Component {
   handleUpdateValueForCharacteristic(data) {
     console.log(
       'Received data from ' +
-        data.peripheral +
-        ' characteristic ' +
-        data.characteristic,
+      data.peripheral +
+      ' characteristic ' +
+      data.characteristic,
       data.value,
     );
   }
@@ -184,7 +150,7 @@ class BLEMang extends Component {
   handleStopScan() {
     console.log('Scan is stopped');
     this.setState({
-      scanning: false,
+      scanning: false
     });
   }
 
@@ -194,7 +160,7 @@ class BLEMang extends Component {
       BleManager.scan([], 3, true).then(results => {
         console.log('Scanning...');
         this.setState({
-          scanning: true,
+          scanning: true
         });
       });
     }
@@ -212,7 +178,7 @@ class BLEMang extends Component {
         peripheral.connected = true;
         peripherals.set(peripheral.id, peripheral);
         this.setState({
-          peripherals,
+          peripherals
         });
       }
     });
@@ -230,7 +196,7 @@ class BLEMang extends Component {
         peripheral.connected = true;
         peripherals.set(peripheral.id, peripheral);
         this.setState({
-          peripherals,
+          peripherals
         });
       }
     });
@@ -257,7 +223,7 @@ class BLEMang extends Component {
 
     peripherals.set(peripheral.id, peripheral);
     this.setState({
-      peripherals,
+      peripherals
     });
   }
 
@@ -272,22 +238,20 @@ class BLEMang extends Component {
           // var colorCharacteristic = UUIDPrefix + '6' + UUIDSuffix;
           // var speedCharacteristic = UUIDPrefix + '7' + UUIDSuffix;
           // var directionCharacteristic = UUIDPrefix + '8' + UUIDSuffix;
-          /*
-                    setTimeout(() => {
-                      BleManager.read(peripheral.id, serviceUUID, colorUUID).then(
-                        colorData => {
-                          console.log('Read color:');
-                          console.log(colorData);
-                          BleManager.read(peripheral.id, serviceUUID, messageUUID).then(
-                            msgData => {
-                              console.log('Read Message:');
-                              console.log(msgData);
-                            },
-                          );
-                        },
-                      );
-                    }, 2500);
-          */
+          setTimeout(() => {
+            BleManager.read(peripheral.id, serviceUUID, colorUUID).then(
+              colorData => {
+                console.log('Read color:');
+                console.log(colorData);
+                BleManager.read(peripheral.id, serviceUUID, messageUUID).then(
+                  msgData => {
+                    console.log('Read Message:');
+                    console.log(msgData);
+                  },
+                );
+              },
+            );
+          }, 2500);
         });
         // BleManager.disconnect(peripheral.id);
         // this.setState({paired: {}});
@@ -300,7 +264,7 @@ class BLEMang extends Component {
             peripherals.set(peripheral.id, p);
             this.setState({
               peripherals,
-              paired: peripherals[0],
+              paired: peripherals[0]
             });
           }
           console.log('Connected to ' + peripheral.id);
@@ -327,49 +291,24 @@ class BLEMang extends Component {
               // var colorCharacteristic = 'cccccccc-cccc-cccc-cccc-cccccccccccc';
 
               setTimeout(() => {
-                BleManager.write(
-                  peripheral.id,
-                  serviceUUID,
-                  colorUUID,
-                  colorToSend,
-                ).then(() => {
+                BleManager.write(peripheral.id, serviceUUID, colorUUID, [
+                  "#F0FF84",
+                ]).then(() => {
                   console.log('Wrote color');
-                  console.log(colorToSend);
-                  const byteString = stringToBytes(newMsg);
-
-
+                  const byteString = stringToBytes(
+                    'This should be the new message that the Arduino displays',
+                  );
                   BleManager.write(
                     peripheral.id,
                     serviceUUID,
                     messageUUID,
                     byteString,
                   ).then(() => {
-                    console.log('Wrote message');
-                    console.log(newMsg);
-
-                    BleManager.write(
-                      peripheral.id,
-                      serviceUUID,
-                      speedUUID,
-                      speedToSend,
-                    ).then(() => {
-                      console.log('Wrote speed');
-                      console.log(speedToSend);
-
-                      BleManager.write(
-                        peripheral.id,
-                        serviceUUID,
-                        directionUUID,
-                        dirToSend,
-                      ).then(() => {
-                        console.log('Wrote direction');
-                        console.log(dirToSend);
-                      });
-                    });
+                    // BleManager.write(peripheral.id, serviceUUID, messageUUID, [
+                    //   13131313.13131313,
+                    // ]).then(() => {
+                    console.log('Wrote Message');
                   });
-//
-//
-//
                 });
               }, 2500);
             });
@@ -385,129 +324,167 @@ class BLEMang extends Component {
     //   return <View />;
     // } else {
     const color = item.connected ? 'green' : '#fff';
-    return (
-      <TouchableHighlight onPress={() => this.test(item)}>
-        <View
-          style={[
-            styles.row,
-            {
-              backgroundColor: color,
-            },
-          ]}>
-          <Text
-            style={{
-              fontSize: 12,
-              textAlign: 'center',
-              color: '#333333',
-              padding: 10,
-            }}>
-            
-            {item.name}
-          </Text>
-          <Text
-            style={{
-              fontSize: 10,
-              textAlign: 'center',
-              color: '#333333',
-              padding: 2,
-            }}>
-            RSSI: {item.rssi}
-          </Text>
-          <Text
-            style={{
-              fontSize: 8,
-              textAlign: 'center',
-              color: '#333333',
-              padding: 2,
-              paddingBottom: 20,
-            }}>
-            
-            {item.id}
-          </Text>
-          <Text
-            style={{
-              fontSize: 6,
-              textAlign: 'center',
-              color: '#aaaaaa',
-              padding: 2,
-              paddingBottom: 5,
-            }}>
-            
-            {JSON.stringify(item)}
-          </Text>
-        </View>
-      </TouchableHighlight>
+    return ( <
+      TouchableHighlight onPress = {
+        () => this.test(item)
+      } >
+      <
+      View style = {
+        [styles.row, {
+          backgroundColor: color
+        }]
+      } >
+      <
+      Text style = {
+        {
+          fontSize: 12,
+          textAlign: 'center',
+          color: '#333333',
+          padding: 10,
+        }
+      } > {
+        item.name
+      } <
+      /Text> <
+      Text style = {
+        {
+          fontSize: 10,
+          textAlign: 'center',
+          color: '#333333',
+          padding: 2,
+        }
+      } >
+      RSSI: {
+        item.rssi
+      } <
+      /Text> <
+      Text style = {
+        {
+          fontSize: 8,
+          textAlign: 'center',
+          color: '#333333',
+          padding: 2,
+          paddingBottom: 20,
+        }
+      } > {
+        item.id
+      } <
+      /Text> <
+      Text style = {
+        {
+          fontSize: 6,
+          textAlign: 'center',
+          color: '#aaaaaa',
+          padding: 2,
+          paddingBottom: 5,
+        }
+      } > {
+        JSON.stringify(item)
+      } <
+      /Text> <
+      /View> <
+      /TouchableHighlight>
     );
     // }
   }
   render() {
     const list = Array.from(this.state.peripherals.values());
 
-    return (
-      <View style={styles.container}>
-        <TouchableHighlight
-          style={{
-            marginTop: 40,
-            margin: 20,
-            padding: 20,
-            backgroundColor: '#ccc',
-          }}
-          onPress={() => this.startScan()}>
-          <Text> Scan Bluetooth({this.state.scanning ? 'on' : 'off'}) </Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          style={{
-            marginTop: 0,
-            margin: 20,
-            padding: 20,
-            backgroundColor: '#ccc',
-          }}
-          onPress={() => this.retrieveDiscovered()}>
-          <Text> Retrieve discovered peripherals </Text>
-        </TouchableHighlight>
-        <ScrollView style={styles.scroll}>
-          
-          {this.state.paired && (
-            <View
-              style={{
-                flex: 1,
-                margin: 20,
-              }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                }}>
-                Paired
-              </Text>
-              <Text
-                style={{
-                  textAlign: 'center',
-                }}>
-                $ {JSON.stringify(this.state.paired)}
-              </Text>
-            </View>
-          )}
-          {list.length == 0 && (
-            <View
-              style={{
-                flex: 1,
-                margin: 20,
-              }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                }}>
-                No peripherals
-              </Text>
-            </View>
-          )}
-          <FlatList
-            data={list}
-            renderItem={({item}) => this.renderItem(item)}
-            keyExtractor={item => item.id}
-          />
-        </ScrollView>
-      </View>
+    return ( <
+      View style = {
+        styles.container
+      } >
+      <
+      TouchableHighlight style = {
+        {
+          marginTop: 40,
+          margin: 20,
+          padding: 20,
+          backgroundColor: '#ccc',
+        }
+      }
+      onPress = {
+        () => this.startScan()
+      } >
+      <
+      Text > Scan Bluetooth({
+        this.state.scanning ? 'on' : 'off'
+      }) < /Text> <
+      /TouchableHighlight> <
+      TouchableHighlight style = {
+        {
+          marginTop: 0,
+          margin: 20,
+          padding: 20,
+          backgroundColor: '#ccc',
+        }
+      }
+      // onPress={() => this.retrieveDiscovered()}>
+      // <Text>Retrieve discovered peripherals</Text>
+      onPress = {
+        () => this.retrieveConnected()
+      } >
+      <
+      Text > Retrieve connected peripherals < /Text> <
+      /TouchableHighlight> <
+      ScrollView style = {
+        styles.scroll
+      } > {
+        this.state.paired && ( <
+          View style = {
+            {
+              flex: 1,
+              margin: 20
+            }
+          } >
+          <
+          Text style = {
+            {
+              textAlign: 'center'
+            }
+          } > Paired < /Text> <
+          Text style = {
+            {
+              textAlign: 'center'
+            }
+          } >
+          $ {
+            JSON.stringify(this.state.paired)
+          } <
+          /Text> <
+          /View>
+        )
+      } {
+        list.length == 0 && ( <
+          View style = {
+            {
+              flex: 1,
+              margin: 20
+            }
+          } >
+          <
+          Text style = {
+            {
+              textAlign: 'center'
+            }
+          } > No peripherals < /Text> <
+          /View>
+        )
+      } <
+      FlatList data = {
+        list
+      }
+      renderItem = {
+        ({
+          item
+        }) => this.renderItem(item)
+      }
+      keyExtractor = {
+        item => item.id
+      }
+      /> <
+      /ScrollView> <
+      /View>
     );
   }
 }
