@@ -8,11 +8,14 @@ Once you have npm installed:
 2. In Terminal or Console, navigate the to project folder (XXX/XXX/XXX/wearable_ble_demo/)
 3. Run "npm install"
 4. navigate to `// file: android/app/src/main/AndroidManifest.xml` and update the file with:
-   ...
-   <uses-permission android:name="android.permission.BLUETOOTH"/>
-   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-   ...
+
+```   <uses-permission android:name="android.permission.BLUETOOTH"/> ```
+
+```   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/> ```
+
+```   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> ```
+
+
    (should be around line 5 or so)
 
 \*\*\* I dont recommend trying on an iOS device, since the setup for allowing even debugging is incredibly frustrating
