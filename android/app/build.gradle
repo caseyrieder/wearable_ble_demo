@@ -129,7 +129,8 @@ android {
 
     defaultConfig {
         applicationId "com.bletest"
-        minSdkVersion rootProject.ext.minSdkVersion
+        // minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion 18
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
@@ -179,8 +180,6 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-ble-manager')
-    implementation project(':react-native-ble-plx')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 

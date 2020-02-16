@@ -22,7 +22,14 @@ import {
   fullRGBConvert,
   hexToBytes,
   intToBytes,
+  intToChar,
+  asciiToHex,
+  isHex,
+  stringToHex,
 } from './dataConversion';
+
+// MAYBE!!!
+import { writeCharacteristic } from './BLEWrite'
 
 const window = Dimensions.get('window');
 
@@ -32,25 +39,47 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 const UUIDPrefix = '23511812-719';
 const UUIDSuffix = '-ba07-abc4-b20a119cd05b';
 const serviceUUID = '23511812-7192-ba07-abc4-b20a119cd05b';
+const pinUUID = '23511812-7193-ba07-abc4-b20a119cd05b';
 const messageUUID = '23511812-7195-ba07-abc4-b20a119cd05b';
 const colorUUID = '23511812-7196-ba07-abc4-b20a119cd05b';
 const speedUUID = '23511812-7197-ba07-abc4-b20a119cd05b';
 const directionUUID = '23511812-7198-ba07-abc4-b20a119cd05b';
+const brightnessUUID = '23511812-7199-ba07-abc4-b20a119cd05b';
+const pin = '1003-123456'
 
-const newMsg = 'This should be the new message that the Arduino displays';
+const newMessage = 'jo';
+let heart = '\x01';
+let heartBytes = stringToHex(heart);
+// let heart = '\u{0001}';
+// const emojiMessage = `${newMessage}${heart}`;
+const emojiMessage = `${newMessage}${heart}${newMessage}`;
+// const hexmoji = stringToHex(emojiMessage);
+const hexmoji = stringToHex(`${newMessage}${heart}${newMessage}`);
 const newColor = 'A12E64';
+const newRGB = [161, 46, 100];
 const newSpeed = 18;
 const newDirection = 1;
+const newBrightness = 0;
 
-const byteMsg = stringToBytes(newMsg);
-
-const midColor = "0x"+newColor;
-const midSpeed = "0x"+newSpeed.toString(16);
+// const midColor = "0x"+newColor;
+const midMessage = asciiToHex(newMessage);
+const midEmojiMessage = asciiToHex(emojiMessage);
+const midColor = newColor;
+const hexSpeed = intToHex(newSpeed);
+const midSpeed = "0x"+hexSpeed;
 const midDir = "0x0"+newDirection.toString(10);
 
+const messageToSendSTG = stringToBytes(hexmoji);
+const messageToSendHEX = hexToBytes(hexmoji);
+const emojiMessageToSendSTG = stringToBytes(midEmojiMessage);
+const emojiMessageToSendHEX = hexToBytes(midEmojiMessage);
+const pinToSend = stringToBytes(pin);
 const colorToSend = stringToBytes(midColor);
-const speedToSend = stringToBytes(midSpeed);
-const dirToSend = stringToBytes(midDir);
+// const colorToSend = intToBytes(newColor);
+// const speedToSend = stringToBytes(midSpeed);
+const speedToSend = intToBytes([newSpeed]);
+// const dirToSend = stringToBytes(midDir);
+const dirToSend = intToBytes(newDirection);
 
 class BLEMang extends Component {
   constructor() {
@@ -117,23 +146,34 @@ class BLEMang extends Component {
         }
       });
     }
-    console.log('new msg text: ', newMsg,'...', typeof newMsg);
-    console.log(' ');
-    console.log(`new color: (${newColor}`);
-    console.log(' ');
-    console.log('new speed: ', newSpeed, '...', typeof newSpeed);
-    console.log(' ');
-    console.log('new direction: ', newDirection, '...', typeof newDirection);
+    console.log(`new msg text: ${newMessage} ... ${typeof newMessage}\n`);
+    console.log(`emoji msg text: ${emojiMessage} ... ${typeof emojiMessage}\n`);
+    console.log(`hexmoji: ${hexmoji} ... ${typeof hexmoji}\n`);
+    console.log(`heartbytes: ${heartBytes}`);
+    console.log(`heartbytes hex?: ${isHex(heartBytes)}`);
+    console.log(`new message is hex?...${isHex(newMessage)}`);
+    console.log(`emoji msg is hex?...${isHex(emojiMessage)}`);
+    // console.log(`new color: ${newColor} ... ${typeof newColor}\n`);
+    // console.log(`new speed: ${newSpeed} ... ${typeof newSpeed}\n`);
+    // console.log(`new direction: ${newDirection} ... ${typeof newDirection}\n\n`);
 
-    console.log(' ');
-    console.log('BYTESBYTESBYTESBYTESBYTES');
-    console.log(`byte msg text: ${byteMsg} ... ${typeof byteMsg}`);
-    console.log(' ');
-    console.log(`byte color: ${colorToSend}`);
-    console.log(' ');
-    console.log(`byte speed: ${speedToSend}... ${typeof speedToSend}`);
-    console.log(' ');
-    console.log(`byte direction: ${dirToSend}... ${typeof dirToSend}`);
+    console.log('HEX\n');
+    console.log(`hex nomoji: ${midMessage}`);
+    console.log(`hex emoji: ${midEmojiMessage}`);
+    console.log(`hex nomoji is hex?...${isHex(midMessage)}`)
+    console.log(`hex emoji is hex?...${isHex(midEmojiMessage)}`)
+    // console.log(`hex color: ${midColor}\n`);
+    // console.log(`hex speed: ${midSpeed}\n`);
+    // console.log(`hex direction: ${midDir}\n\n`);
+
+    // console.log('BYTES\n');
+    // console.log(`hex msg: ${messageToSendHEX}\n`);
+    // console.log(`hex emoji: ${emojiMessageToSendHEX}\n`);
+    // console.log(`stg msg: ${messageToSendSTG}\n`);
+    // console.log(`stg emoji: ${emojiMessageToSendSTG}\n`);
+    // console.log(`byte color: ${colorToSend}\n`);
+    // console.log(`byte speed: ${speedToSend}\n`);
+    // console.log(`byte dir: ${dirToSend}\n\n`);
   }
   handleAppStateChange(nextAppState) {
     if (
@@ -236,13 +276,6 @@ class BLEMang extends Component {
     });
   }
 
-  // mapToObj(m) {
-  //   return Array.from(m).reduce((obj, [key, value]) => {
-  //     obj[key] = value;
-  //     return obj;
-  //   }, {});
-  // }
-
   handleDiscoverPeripheral(peripheral) {
     var peripherals = this.state.peripherals;
     console.log('Got ble peripherals, total:');
@@ -267,30 +300,7 @@ class BLEMang extends Component {
         BleManager.retrieveServices(peripheral.id).then(peripheralInfo => {
           console.log('retrieved services');
           console.log(peripheralInfo.characteristics);
-          // var service = UUIDPrefix + '2' + UUIDSuffix;
-          // var messageCharacteristic = UUIDPrefix + '5' + UUIDSuffix;
-          // var colorCharacteristic = UUIDPrefix + '6' + UUIDSuffix;
-          // var speedCharacteristic = UUIDPrefix + '7' + UUIDSuffix;
-          // var directionCharacteristic = UUIDPrefix + '8' + UUIDSuffix;
-          /*
-                    setTimeout(() => {
-                      BleManager.read(peripheral.id, serviceUUID, colorUUID).then(
-                        colorData => {
-                          console.log('Read color:');
-                          console.log(colorData);
-                          BleManager.read(peripheral.id, serviceUUID, messageUUID).then(
-                            msgData => {
-                              console.log('Read Message:');
-                              console.log(msgData);
-                            },
-                          );
-                        },
-                      );
-                    }, 2500);
-          */
         });
-        // BleManager.disconnect(peripheral.id);
-        // this.setState({paired: {}});
       } else {
         BleManager.connect(peripheral.id).then(() => {
           let peripherals = this.state.peripherals;
@@ -306,70 +316,60 @@ class BLEMang extends Component {
           console.log('Connected to ' + peripheral.id);
 
           setTimeout(() => {
-            /* Test read current RSSI value */
-            // BleManager.retrieveServices(peripheral.id).then(
-            //   peripheralData => {
-            //     console.log('Retrieved peripheral services', peripheralData);
-            //     BleManager.readRSSI(peripheral.id).then(rssi => {
-            //       console.log('Retrieved actual RSSI value', rssi);
-            //     });
-            //   },
-            // );
-
-            // Test using bleno's pizza example
-            // https://github.com/sandeepmistry/bleno/tree/master/examples/pizza
             BleManager.retrieveServices(peripheral.id).then(peripheralInfo => {
               console.log('retrieved services');
               console.log(peripheralInfo.characteristics);
-              // var service = '11111111-1111-1111-1111-111111111111';
-              // var messageCharacteristic =
-              //   'ffffffff-ffff-ffff-ffff-ffffffffffff';
-              // var colorCharacteristic = 'cccccccc-cccc-cccc-cccc-cccccccccccc';
 
+              // writeCharacteristic(peripheral.id, 'message', newMessage);
+              // writeCharacteristic(peripheral.id, 'color', newColor);
+              // writeCharacteristic(peripheral.id, 'speed', newSpeed);
+              // writeCharacteristic(peripheral.id, 'direction', newDirection);
+              // writeCharacteristic(peripheral.id, 'brightness', newBrightness);
+              
               setTimeout(() => {
-                BleManager.write(
-                  peripheral.id,
-                  serviceUUID,
-                  colorUUID,
-                  colorToSend,
-                ).then(() => {
-                  console.log('Wrote color');
-                  console.log(colorToSend);
-                  const byteString = stringToBytes(newMsg);
+                // const byteString = stringToBytes(newMessage);
 
+                BleManager.write(peripheral.id, serviceUUID, pinUUID, pinToSend).then(() => {
+                  console.log(`Wrote pin: '${String.fromCharCode.apply(null, pinToSend)}'\n`);
+                  BleManager.write(peripheral.id, serviceUUID, messageUUID, emojiMessageToSendHEX).then(() => {
+                    // console.log(`emo hex: '${String.fromCharCode.apply(null, emojiMessageToSendHEX)}'\n`);
+                    console.log(`textMessage: ${emojiMessage}\n`);
+                    console.log(`hexMessage: ${midEmojiMessage}\n`);
+                    // console.log(`hexMoji: ${hexmoji}\n`);
+                    // console.log(`emojiMessageToSendHEX: ${emojiMessageToSendHEX}\n`);
+                    // console.log(`string from hex: ${String.fromCharCode.apply(null, emojiMessageToSendHEX)}\n`);
+                    
+                    BleManager.write(peripheral.id, serviceUUID, messageUUID, emojiMessageToSendSTG).then(() => {
+                      // console.log(`Nonmoji message: '${String.fromCharCode.apply(null, messageToSendHEX)}'\n`);
+                      // console.log(`emo stg: ${String.fromCharCode.apply(null, emojiMessageToSendSTG)}\n`);
+                      
+                      
+                      // BleManager.write(peripheral.id, serviceUUID, messageUUID, messageToSendHEX).then(() => {
+                      //   console.log(`txt hex: [${messageToSendHEX}]\n`);
+                      //   BleManager.write(peripheral.id, serviceUUID, messageUUID, messageToSendSTG).then(() => {
+                      //     console.log(`txt stg: [${messageToSendSTG}]\n`);
+                              BleManager.write(peripheral.id, serviceUUID, colorUUID, newRGB).then(() => {
+                                console.log(`color: '${newRGB}`);
+                                console.log('colortype: '+typeof newRGB+'\n');
+                        BleManager.write(peripheral.id, serviceUUID, speedUUID, [newSpeed]).then(() => {
+                          console.log(`speed: '${newSpeed}`);
+                          console.log('speedtype: '+typeof newSpeed+'\n');
 
-                  BleManager.write(
-                    peripheral.id,
-                    serviceUUID,
-                    messageUUID,
-                    byteString,
-                  ).then(() => {
-                    console.log('Wrote message');
-                    console.log(newMsg);
-
-                    BleManager.write(
-                      peripheral.id,
-                      serviceUUID,
-                      speedUUID,
-                      speedToSend,
-                    ).then(() => {
-                      console.log('Wrote speed');
-                      console.log(speedToSend);
-
-                      BleManager.write(
-                        peripheral.id,
-                        serviceUUID,
-                        directionUUID,
-                        dirToSend,
-                      ).then(() => {
-                        console.log('Wrote direction');
-                        console.log(dirToSend);
+                        BleManager.write(peripheral.id, serviceUUID, directionUUID, [newDirection]).then(() => {
+                          console.log(`direction: '${newDirection}`);
+                          console.log('directiontype: '+typeof newDirection+'\n');
+                          
+                          BleManager.write(peripheral.id, serviceUUID, brightnessUUID, [newBrightness]).then(() => {
+                            console.log(`brightness: '${newBrightness}`);
+                            console.log('brightnesstype: '+typeof newBrightness+'\n');
+                          });
+                        });
                       });
+                          });
                     });
-                  });
-//
-//
-//
+                      });
+                  // });
+                  //   });
                 });
               }, 2500);
             });
@@ -381,65 +381,66 @@ class BLEMang extends Component {
   // }
 
   renderItem(item) {
-    // if (item.name == 'NO NAME') {
-    //   return <View />;
-    // } else {
-    const color = item.connected ? 'green' : '#fff';
-    return (
-      <TouchableHighlight onPress={() => this.test(item)}>
-        <View
-          style={[
-            styles.row,
-            {
-              backgroundColor: color,
-            },
-          ]}>
-          <Text
-            style={{
-              fontSize: 12,
-              textAlign: 'center',
-              color: '#333333',
-              padding: 10,
-            }}>
-            
-            {item.name}
-          </Text>
-          <Text
-            style={{
-              fontSize: 10,
-              textAlign: 'center',
-              color: '#333333',
-              padding: 2,
-            }}>
-            RSSI: {item.rssi}
-          </Text>
-          <Text
-            style={{
-              fontSize: 8,
-              textAlign: 'center',
-              color: '#333333',
-              padding: 2,
-              paddingBottom: 20,
-            }}>
-            
-            {item.id}
-          </Text>
-          <Text
-            style={{
-              fontSize: 6,
-              textAlign: 'center',
-              color: '#aaaaaa',
-              padding: 2,
-              paddingBottom: 5,
-            }}>
-            
-            {JSON.stringify(item)}
-          </Text>
-        </View>
-      </TouchableHighlight>
-    );
-    // }
-  }
+    if (!item.name.includes('type your reply') && !item.name.includes('Type your reply')) {
+      return <View />
+    } else {
+      const color = item.connected ? 'green' : '#fff';
+      return (
+        <TouchableHighlight onPress={() => this.test(item)}>
+          <View
+            style={[
+              styles.row,
+              {
+                backgroundColor: color,
+              },
+            ]}>
+            <Text
+              style={{
+                fontSize: 12,
+                textAlign: 'center',
+                color: '#333333',
+                padding: 10,
+              }}>
+              
+              {item.name}
+            </Text>
+            <Text
+              style={{
+                fontSize: 10,
+                textAlign: 'center',
+                color: '#333333',
+                padding: 2,
+              }}>
+              RSSI: {item.rssi}
+            </Text>
+            <Text
+              style={{
+                fontSize: 8,
+                textAlign: 'center',
+                color: '#333333',
+                padding: 2,
+                paddingBottom: 20,
+              }}>
+              
+              {item.id}
+            </Text>
+            <Text
+              style={{
+                fontSize: 6,
+                textAlign: 'center',
+                color: '#aaaaaa',
+                padding: 2,
+                paddingBottom: 5,
+              }}>
+              
+              {JSON.stringify(item)}
+            </Text>
+          </View>
+        </TouchableHighlight>
+      );
+    }
+  };
+
   render() {
     const list = Array.from(this.state.peripherals.values());
 
@@ -477,7 +478,13 @@ class BLEMang extends Component {
                 style={{
                   textAlign: 'center',
                 }}>
-                Paired
+                sendAs HexHEX: {emojiMessageToSendHEX}
+              </Text>
+              <Text
+                style={{
+                  textAlign: 'center',
+                }}>
+                sendAs STG: {emojiMessageToSendSTG}
               </Text>
               <Text
                 style={{
